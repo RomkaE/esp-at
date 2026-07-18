@@ -4,7 +4,14 @@
 # in this exact order for cmake to work correctly
 cmake_minimum_required(VERSION 3.5)
 
-set(IDF_PATH ${CMAKE_SOURCE_DIR}/esp-idf)
+# Use SDK from the IDF_PATH environment variable (e.g. the one baked into the
+# Docker image) if it is set; otherwise fall back to the in-tree esp-idf clone
+# that build.py would create.
+if(DEFINED ENV{IDF_PATH})
+    set(IDF_PATH $ENV{IDF_PATH})
+else()
+    set(IDF_PATH ${CMAKE_SOURCE_DIR}/esp-idf)
+endif()
 
 string(TOLOWER $ENV{ESP_AT_MODULE_NAME} LOWER_NAME)
 
